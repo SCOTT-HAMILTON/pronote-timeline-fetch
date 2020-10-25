@@ -20,6 +20,10 @@ async function main()
 				alias: 't',
 				description: "The ending date of the timeline to fetch (in ISO-8601 format)",
 				required: true
+			},
+			output: {
+				alias: 'o',
+				description: "The output file to output",
 			}
 		})
 	.argv;
@@ -28,31 +32,29 @@ async function main()
 	const to = argv.to;
 
 	const configFile = process.env.HOME+"/.config/pronote-timetable-fetch.conf"
-	console.log(configFile)
 	let config = JSON.parse(fs.readFileSync(configFile));
 	username = config["username"]
 	password = Buffer.from(config["password"], "base64").toString("UTF-8")
 	url = config["url"]
-	console.log(password)
 
 	const timetableFrom = new Date(from);
 	const timetableTo = new Date(to);
-	console.log(timetableFrom, timetableTo);
     const session = await pronote.login(url, username, password/*, cas*/);
-    console.log(session.user.name);
-    console.log(session.user.studentClass.name);
 	let result = {};
     const timetable = await session.timetable(timetableFrom, timetableTo);
 	result["timetable"] = timetable;
 	result["name"] = session.user.name;
-
-    fs.writeFile('timetable.json', JSON.stringify(result), (error) => {console.log(error)}); 
-    console.log(timetable); 
+	if (argv.output === undefined) {
+		console.log(JSON.stringify(result));
+	} else {
+		fs.writeFile(argv.output, JSON.stringify(result), (error) => {if (error) {console.log(error);}});
+	}
+	return 1;
 }
 
 main().catch(err => {
     if (err.code === pronote.errors.WRONG_CREDENTIALS.code) {
-        console.error('Mauvais identifiants');    
+        console.error('Bad credentials');
     } else {
         console.error(err);
     }
