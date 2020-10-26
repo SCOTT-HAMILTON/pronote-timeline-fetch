@@ -8,7 +8,7 @@
 		"url": "git+https://github.com/SCOTT-HAMILTON/pronote-timetable-fetch.git"
 	},
 	"bin": {
-		"pronote-timeline-fetch": "./index.js"
+		"pronote-timetable-fetch": "./index.js"
 	},
 	"keywords": [
 		"pronote",

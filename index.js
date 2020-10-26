@@ -13,12 +13,12 @@ async function main()
 		.options({
 			from: {
 				alias: 'f',
-				description: "The starting date of the timeline to fetch (in ISO-8601 format)",
+				description: "The starting date of the timetable to fetch (in ISO-8601 format)",
 				required: true
 			},
 			to: {
 				alias: 't',
-				description: "The ending date of the timeline to fetch (in ISO-8601 format)",
+				description: "The ending date of the timetable to fetch (in ISO-8601 format)",
 				required: true
 			},
 			output: {
